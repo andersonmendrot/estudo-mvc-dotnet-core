@@ -1,1 +1,1 @@
-# estudo_csharp
+Repositório para armazenar anotações e exercícios realizados no curso *MVC Application Design using .NET Core 2.0* da edX, o qual fornece uma introdução sobre a arquitetura MVC utilizando .NET Core 2.0
