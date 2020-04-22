@@ -2,69 +2,69 @@
 
 *The classification of Models*
 
-- Domain Models Design
-- View Model Design
-- Data Transfer Model Design
+⋅⋅* Domain Models Design
+⋅⋅* View Model Design
+⋅⋅* Data Transfer Model Design
 
 1) Domain models: represent the real-world objects that participate in the business logic. For example, Student and Teacher objects in a school system, or Order (Pedido) and Product objects in a sales management system.. So, a Student could have name, classes, grades, etc. 
 
 ```cs
 public partial class Actor {
-    public int Actor_ID {get; set;}
-    public string First_Name {get; set;}
-    public string Last_Name {get; set;}
-    public DateTime Last_Update {get; set;}
+	public int Actor_ID {get; set;}
+	public string First_Name {get; set;}
+	public string Last_Name {get; set;}
+	public DateTime Last_Update {get; set;}
 }
 ```
 
 The two modification below are more suitable for ORM. 
 
- 
+```cs
 public partial class Actor {
-[Key]
-public int Actor_ID {get; set;}
-public string First_Name {get; set;}
-public string Last_Name {get; set;}
-public DateTime Last_Update {get; set;}
+	[Key]
+	public int Actor_ID {get; set;}
+	public string First_Name {get; set;}
+	public string Last_Name {get; set;}
+	public DateTime Last_Update {get; set;}
 }
 
  
-[Table(“actor”)]
-public partial class Actor {
-      [Key, Column(“actor_id”)]
-public int ActorID {get; set;}
+	[Table(“actor”)]
+	public partial class Actor {
+	      [Key, Column(“actor_id”)]
+	public int ActorID {get; set;}
     
-[Column(“first_name”)]
-public string FirstName {get; set;}
-    
-      [Column(“last_name”)]
-public string LastName {get; set;}
-    
-      [Column(“last_update”)]
-public DateTime LastUpdate {get; set;}
-}
+	[Column(“first_name”)]
+	public string FirstName {get; set;}
+
+	      [Column(“last_name”)]
+	public string LastName {get; set;}
+
+	      [Column(“last_update”)]
+	public DateTime LastUpdate {get; set;}
+	}
+```
 
 We created the model class as a partial class because we should separate the operation/behavior portion from the data/entity portion. The benefit of doing this is that you can generate the data/entity portion of the model class using automation tools without overriding of removing the operation code. For example, the code below will not be overridden when you regenerate the entity portion of the Actor class:
 
- 
-public partial class Actor {
-	public IList<Film> GetFilmsInStock(){
-	// call stored procedures
-}
- 
-public IList<Film> GetFilmsNotInStock() {
-	//call stored procedures
-}
-}
+```cs
+	public partial class Actor {
+		public IList<Film> GetFilmsInStock(){
+		// call stored procedures
+	}
 
+	public IList<Film> GetFilmsNotInStock() {
+		//call stored procedures
+	}
+```
 
 2) View models: designed for specific views. For example, if we want to show a customer (cliente/comprador) and all his/her orders on the page, we can create a class called CustomerOrdersViewModel and let this class have a Customer type property and an IList<Order> type property. So, we will have like a composition, with a relationship that One Customer has Many Orders.
 
 There are three types of View Model:
-Strongly-typed model view
-Loosely-typed model view 
-That uses ListView
-That used ListBag
+⋅⋅* Strongly-typed model view
+⋅⋅* Loosely-typed model view that uses ListView
+⋅⋅* Loosely-typed model view that uses ListBag
+
 
 **Strongly-typed model view**
 
@@ -72,7 +72,7 @@ If not explicitly stated, when mentioning view model, the view model is strongly
 
 For example, In the code below, we set a view’s view model type to be the Actor class we created in the last lesson, and we also render the view model in an HTML table.
 
- 
+
 @model HelloMVC.Models.Actor <!--A view model type strongly-typed for Actor-->
 <html>
       <head>
@@ -94,27 +94,29 @@ For example, In the code below, we set a view’s view model type to be the Acto
 </body>
 </html>
 
+
 Let’s wrap up:
-We can use the domain model class as the view model class if the view just renders a domain model object
-We have to create a composite view model class for specific views if the view renders more than one object
+⋅⋅* We can use the domain model class as the view model class if the view just renders a domain model object
+⋅⋅* We have to create a composite view model class for specific views if the view renders more than one object
 
 **Loosely-typed view model**
 
 We use it when we want to render a property that is not really necessary to have explicitly in a class. For example, seems weird add a title property to the class below if we just want to render it in a page inside h1 tags.
 
- 
+```cs
 public class DirectorFilmsViewModel {
     public Director Director { get; set; }
     public IList<Film> Films { get; set; }
     public string Title {get; set;}
 }
+```
 
 For that, we can use two kinds of loosely-typed view models:
-**ViewData**: a dictionary class that implements the IDictionary<string object> interfaces
-**ViewBag**:  a dynamic object
+⋅⋅* ViewData**: a dictionary class that implements the IDictionary<string object> interfaces
+⋅⋅* ViewBag**:  a dynamic object
 
- 
-  Controllers/TestController.cs
+ ```cs
+  //Controllers/TestController.cs
  
   public class TestController : Controller {
  
@@ -131,9 +133,9 @@ For that, we can use two kinds of loosely-typed view models:
             return View();
         }
    }
-
+   ```
  
-<!--Views/Test/Foo.cshtml-->
+   <!--Views/Test/Foo.cshtml-->
  
 <html>
     <head>
@@ -155,8 +157,7 @@ For that, we can use two kinds of loosely-typed view models:
 
 *Domain Model as DTO*
 
-  
-	<!--Views/Film/Create.cshtml-->
+      <!--Views/Film/Create.cshtml-->
   
      <form action="film/create" method="POST">
         <span>Name</span>
@@ -190,7 +191,7 @@ For that, we can use two kinds of loosely-typed view models:
 
 *The DTO class is the same as the Film domain model class:*
 
-    
+    ```cs
     // Models/Film.cs
  
     public class Film {
@@ -200,10 +201,11 @@ For that, we can use two kinds of loosely-typed view models:
         public ICollection<Genre> Genres { get; set; }
         public bool IsInStore { get; set; }
     }
-
+	```
+	
 *In this situation, when they are both equal, we don’t need to create CreateOrUpdateDTO al all, we can use only the Film domain model class and add the below code*:
 
- 
+ ```cs
     // Controllers/FilmController.cs
  
     public IActionResult Create(Film film) {
@@ -215,17 +217,19 @@ For that, we can use two kinds of loosely-typed view models:
         // update the existing film by ID
 	      return View(“Update”);
     }
+```
 
 *DTO Class* (if the DTO has to be different of the Film domain model class)
 
-    
+```cs
 public class CreateOrUpdateDTO {
-   	  public int ID { get; set; }
-    	  public string Name { get; set; }
-   	  public int Year { get; set; }
-   	  public ICollection<Genre> Genres { get; set; }
-   	  public bool IsInStore { get; set; }
+	  public int ID { get; set; }
+	  public string Name { get; set; }
+	  public int Year { get; set; }
+	  public ICollection<Genre> Genres { get; set; }
+	  public bool IsInStore { get; set; }
 }
+```
 
 
 **Controllers**
@@ -237,14 +241,14 @@ Usually, the actions will launch the rendering process of the views and return t
 **TL;DR**
 A controller logically groups actions together
 i.e. the ProductController contains actions of CRUD. 
-URL routing: when HTTP requests are mapped to actions 
+⋅⋅*URL routing: when HTTP requests are mapped to actions 
 Actions launch rendering process of views and return the rendering result
-Redirection: when a action transfer the logic execution to another action
+⋅⋅*Redirection: when a action transfer the logic execution to another action
 
-Use a singular noun for controller of .NET Core application (ProductController)
-Use a plural noun for controller of .NET Core web API application (ProductsController)
+⋅⋅*Use a singular noun for controller of .NET Core application (ProductController)
+⋅⋅*Use a plural noun for controller of .NET Core web API application (ProductsController)
 
-  
+  ```cs
   using Microsoft.AspNetCore.Mvc;
  
   namespace App.Controllers {
@@ -269,17 +273,20 @@ Use a plural noun for controller of .NET Core web API application (ProductsContr
         // Actions
     }
   }
-
+```
 
 Common ASP.NET Core application actions always return IActionResult type values, except in the case that they returns JsonResult instances. 
 
 The feature of converting return values to JSON objects means that ASP.NET Core web application can work as web API applications. But there is no reason for us to put web API applications actions in a web application controller.
 
 Usually, the returns of actions are:
-*return View(something);*
-*return RedirectToAction(someAction);*
 
- 
+```cs
+return View(something);
+return RedirectToAction(someAction);
+```
+
+ ```cs
   public class ProductController : Controller {
     public DatabaseContext dbContext { get; set; }
  
@@ -299,16 +306,16 @@ Usually, the returns of actions are:
         return View(products);
     }
  }
-
+```
 **URL Routing**
 
-- Map an incoming request to a router handler (usually, the handler is an action)
-- Routes are case-insensitive
-- There are two types of routes supported in .NET Core:
+ Map an incoming request to a router handler (usually, the handler is an action)
+⋅⋅* Routes are case-insensitive
+⋅⋅* There are two types of routes supported in .NET Core:
 
- *Conventional routing* (most used for .NET Core web applications): “{controller=Home}/{action=Index}/{id?}”
+ 1. Conventional routing* (most used for .NET Core web applications): “{controller=Home}/{action=Index}/{id?}”
  
- *Attribute routing* 
+ 2. Attribute routing
  If a controller class is modified by [Route(“Product”)] and an action in this controller is modified by [Route(“Create”)], the URL “product/create” will be handled just by this action
  When mapping the {controller} parameter to the target controller, class, the Controller suffix (if it exists) of the class name will be ignored. For example, if the {controller} parameter gets the value Product, it matches the class ProductController, the class Product modified by [Controller] and the class Product inherits Microsoft.AspNetCore.Mvc.Controller.
  A ? suffix indicates the parameter can be omitted, for example {id?}  
@@ -330,7 +337,7 @@ The Create action without parameters will navigate the user to the page on which
 One action that does the current job
 The Create action that has a Film parameter accepts the film created by the user
 
- 
+ ```cs
   public class FilmController : Controller {
         [HttpGet]
         public IActionResult Create() {
@@ -380,15 +387,16 @@ The Create action that has a Film parameter accepts the film created by the user
             }
         }
     }
- 
+ ```
  
 
 An example of how to get a list from database:
-     
+     ```cs
     public IActionResult GetAllProducts() {
       IList<Product> products = dbContext.GetAllProducts();
       return new View("ProductList", products);
     }
+ 	```
  
   The action above will render:...
   <th>
@@ -401,18 +409,18 @@ An example of how to get a list from database:
     <td>Book</td>
     <td>19.99</td>
   </tr>
-  ...
+  
  
 
-**First action**: MVC web application action. It uses a view called ProductList to render a list of products and generate HTML, which is sent back to web client. 
+⋅⋅* First action**: MVC web application action. It uses a view called ProductList to render a list of products and generate HTML, which is sent back to web client. 
 
-**Views in MVC pattern**: they consist in HTML templates with view logic code, and generate a HTML content to web client
-**Razor**: the name of ASP.NET Core's view engine
-**View engine**: the component in ASP.NET Core which executes the rendering job, generates HTML and content using views and models
+⋅⋅* Views in MVC pattern**: they consist in HTML templates with view logic code, and generate a HTML content to web client
+⋅⋅* Razor**: the name of ASP.NET Core's view engine
+⋅⋅* View engine**: the component in ASP.NET Core which executes the rendering job, generates HTML and content using views and models
 
-**Next three actions**: web API actions, that return the products data directly to the web client. The data is serialized to JSON string. These actions don't follow the MVC pattern
+⋅⋅* Next three actions**: web API actions, that return the products data directly to the web client. The data is serialized to JSON string. These actions don't follow the MVC pattern
 
-    
+    ```cs
     public IList<Product> GetAllProducts() {
           IList<Product> products = dbContext.GetAllProducts();
           return products;
@@ -435,7 +443,7 @@ An example of how to get a list from database:
        {"ID":102, "Name":"Bike", "Price":29.99},
        {"ID":103, "Name":"Fireworks", "Price":39.99}
     ]
- 
+    ```
 
 **Differences of [HttpGet] and [HttpPost]**
 
@@ -444,6 +452,7 @@ An example of how to get a list from database:
 
 **Extract data from URL**
 
+  ```cs
   public class Product {
       public int ID { get; set; }
       public string Name { get; set; }
@@ -452,7 +461,7 @@ An example of how to get a list from database:
       public bool IsAvailable { get; set; }
       public string Description { get; set; }
   }
-
+  ```
 When a web client launches an HTTP POST request to the URL:
 http://localhost:5000/product/create/101?isavailable=false&madein=USA
 And the data in the body is:
@@ -462,14 +471,15 @@ The value of the product parameter is a reference to a Product type object creat
 
 
 Principles
-- For HTTP GET requests, use URL of query strings to transfer data
-- For HTTP POST requests, use form data to transfer data
-- Distribute data to different parts only when necessary
+⋅⋅* For HTTP GET requests, use URL of query strings to transfer data
+⋅⋅* For HTTP POST requests, use form data to transfer data
+⋅⋅* Distribute data to different parts only when necessary
 
 **Custom model binder**
 
 If the type of an action parameter is too complex, the model binding engine will fail to create the object. For example, if we have domain model classes:
 
+```cs
 public class Player {
     public string Name { get; set; }
     public int Rank { get; set; }
@@ -480,6 +490,8 @@ public class Game {
     public Player Player1 { get; set; }
     public Player Player2 { get; set; }
 }
+```
+
 And the name-value pairs in the form body are:
 
 p1Name=Superman
@@ -490,7 +502,7 @@ gameCity=Seattle
 
 We need a custom model binder, which is a class that implements the IModelBinder interface. For this case:
 
- 
+ ```cs
   public class GameModelBinder : IModelBinder {
      public Task BindModelAsync(ModelBindingContext bindingContext) {
         var game = new Game();
@@ -501,58 +513,60 @@ We need a custom model binder, which is a class that implements the IModelBinder
         game.Player1.Rank = int.Parse(bc.Form["p1Rank"]);
         game.Player2.Name = bc.Form["p2Name"];
         game.Player2.Rank = int.Parse(bc.Form["p2Rank"]);
-  game.City = bc.Form["gameCity"];
+ 	game.City = bc.Form["gameCity"];
         // set the model binding result
         bindingContext.Result = ModelBindingResult.Success(game); 
         return TaskCache.CompletedTask;
      }
   }
+ ```
  
-  ///////////////////////////////////////////////////
- 
+  ```cs
   public class GameController : Controller {
     public IActionResult Create(
          [ModelBinder(BinderType = typeof(GameModelBinder))] Game game) {
         // business logic ...
         return View(game);
     }
-}
+   }
+```
 
 **Views and the Razor Engine**
 
 Code in a Razor syntax isn’t HTML code, it’s a markup syntax that consists of Razon markup, C#, and HTML.
-Static text: HTML elements and plain text
-Executable code: the code after the @ symbol, that is C# or “C#-like”
-HTML files containing Razor code have a .cshtml extension
-An .NET Core view is a .cshtml file
-Razor keywords
-Pure Razor keywords: model, functions, inherits, section, helper
-C# Razor keywords: using, for, foreach, if, else, while, do, switch, case, default, try, catch, finally
+⋅⋅* Static text: HTML elements and plain text
+⋅⋅* Executable code: the code after the @ symbol, that is C# or “C#-like”
+⋅⋅* HTML files containing Razor code have a .cshtml extension
+⋅⋅* An .NET Core view is a .cshtml file
+
+**Razor keywords**
+⋅⋅* Pure Razor keywords: model, functions, inherits, section, helper
+⋅⋅* C# Razor keywords: using, for, foreach, if, else, while, do, switch, case, default, try, catch, finally
 Base type of view class: Microsoft.AspNetCore.Mvc.Razor.RazorPage<TModel>
+
 Two common mistakes:
-Adding a semicolon (;) after Razon expressions
-Using a Razor code block @{...} where there should be @(...)
+⋅⋅* Adding a semicolon (;) after Razon expressions
+⋅⋅* Using a Razor code block @{...} where there should be @(...)
 
-View discovery
+**View discovery**
 
-First action: Razor engine will 
-try to find project-root level folder called Views
-try to find subfolder that has the same name as the controller (Views/Home)
-try to find .cshtml file which has the same name as the action (Views/Home/Index.cstml)
+⋅⋅* First action: Razor engine will 
+1. try to find project-root level folder called Views
+2. try to find subfolder that has the same name as the controller (Views/Home)
+3. try to find .cshtml file which has the same name as the action (Views/Home/Index.cstml)
 
-Second action:
-try to find folder Views
-try to find the subfolder Home
-try to find Index.cshtml
+⋅⋅* Second action:
+1. try to find folder Views
+2. try to find the subfolder Home
+3. try to find Index.cshtml
 
-Third action: 
-try to find the relative path
+⋅⋅* Third action: 
+1. try to find the relative path
 
 For the first and second View methods, if the folder or view file does not exists, the Razor engine try to find for the Index.cshtml file in Views/Shared folder
 
- 
+ ```cs
   public class HomeController : Controller {
-      
       //First action
       public IActionResult Index() {
           return View();
@@ -568,24 +582,37 @@ For the first and second View methods, if the folder or view file does not exist
           return View("~/Views/Home/Index.cshtml");
       }
   }
-
+  ```
 
 **Difference of ILIST and List**
 
-List<T> is a class that implements IList<T>. It’s more specific, and should be used when we want to use fields, that is, instantiate a list like this:
+⋅⋅*List<T> is a class that implements IList<T>. It’s more specific, and should be used when we want to use fields, that is, instantiate a list like this:
+
+```cs
 List <int> myList = new List<int>();
-IList<T> is an interface implemented by List<T>. It should be used as arguments or properties because it’s more general. It cannot be instantiated
-Wrong: ILIst<int> myGenericList = new IList<int>();
-Right: IList<int> myList = new List<int>();
+```
+
+⋅⋅* IList<T> is an interface implemented by List<T>. It should be used as arguments or properties because it’s more general. It cannot be instantiated
+
+Wrong: 
+
+```cs
+ILIst<int> myGenericList = new IList<int>();
+```
+
+Right: 
+```cs
+IList<int> myList = new List<int>();
+```
 
 **Lab: Razor Syntax Fundamentals**
 
 We can show a table on the screen with data from two models with the following steps:
-Develop two kind of models:
-Product and Discount, which are Domain Models
-ProductListVM, which is View-Model, and used to centralize data in one point to be showed on the screen
+1. Develop two kind of models:
+2. Product and Discount, which are Domain Models
+3. ProductListVM, which is View-Model, and used to centralize data in one point to be showed on the screen
 
-  
+  ```cs
   using System;
   namespace MyWebApp.Models{
       public class Discount{
@@ -594,7 +621,6 @@ ProductListVM, which is View-Model, and used to centralize data in one point to 
           public double Rate { get; set; }
       }
   }
-
   
   namespace MyWebApp.Models{
       public class Product {
@@ -612,12 +638,13 @@ ProductListVM, which is View-Model, and used to centralize data in one point to 
           public IList<Product> Products { get; set; }
       }
   }
+ ```
 
 Develop a controller to deal with models and renderize them in a view
 
 We created an instance of ProductListVM and initialize their properties Discount and Products instantiating them and initializing with data to be rendered. After that, we set a value for the model property of a view instance. In this case, the view is Model/Product/ProductList.cshtml, and the value is vm. 
 
- 
+  ```cs
   using System.Collections.Generic;
   using Microsoft.AspNetCore.Mvc;
   using MyWebApp.Models;
@@ -626,28 +653,27 @@ We created an instance of ProductListVM and initialize their properties Discount
   public class ProductController : Controller {
  
   public IActionResult Index(){
-            var vm = new ProductListVM();
-            vm.Discount = new Discount{ 
-                      Start=DateTime.Today, 
-                      End = DateTime.Today.AddDays(30), 
-                      Rate=0.75};
-            vm.Products = new List<Product>();
-            vm.Products.Add(new Product{ID=1001, Name="Book", Price=20});
-            vm.Products.Add(new Product{ID=2002, Name="Bike", Price=30});
-            vm.Products.Add(new Product{ID=3003, Name="Fireworks", Price=40});
- 
-            return View("ProductList", vm);
-     // public virtual ViewResult View(string ViewName, object Model)
-        }
- 
+      var vm = new ProductListVM();
+      vm.Discount = new Discount{ 
+	      Start=DateTime.Today, 
+	      End = DateTime.Today.AddDays(30), 
+	      Rate=0.75};
+      vm.Products = new List<Product>();
+      vm.Products.Add(new Product{ID=1001, Name="Book", Price=20});
+      vm.Products.Add(new Product{ID=2002, Name="Bike", Price=30});
+      vm.Products.Add(new Product{ID=3003, Name="Fireworks", Price=40});
+      return View("ProductList", vm);
+      public virtual ViewResult View(string ViewName, object Model) 
+  ```
 
 
 **Develop a view to show the renderized data** 
 
-	In the first two lines we say that we wanna to use ProductListVM. After that, we create some variables to hold the ProductListVM data, which are start, end, rate. Besides, we create a variable called off to hold the percentage of price that are off.
-	So we create the HTML structure to show the @off and inside that we create a table to show the list of Products that we passed as a parameter in the View(...) command.
+In the first two lines we say that we wanna to use ProductListVM. After that, we create some variables to hold the ProductListVM data, which are start, end, rate. Besides, we create a variable called off to hold the percentage of price that are off.
+	
+So we create the HTML structure to show the @off and inside that we create a table to show the list of Products that we passed as a parameter in the View(...) command.
     
-    
+     
     @using MyWebApp.Models
     @model ProductListVM //it has the value vm, setted in View(...) in ProductController
  
@@ -692,10 +718,12 @@ We created an instance of ProductListVM and initialize their properties Discount
 **Extension methods**
 
 Extension methods are additional methods. They allow you to inject new methods without modifying, deriving or recompiling the original class, struct or interface. Extension methods can be added to your own custom class, .NET framework classes, C# classes, etc.
+
 As an example, IsGreaterThan() is a method injected of int data type (Int32 struct), and written by programmer for customize the data type.
+
 An extension methods is actually a special kind of static method defined in a static class. The first parameter of the static method has to be the type on which the extension method is applicable (in our case, int type). Then we are going to use this int i. 
 
- 
+ ```cs
   namespace ExtensionMethods; 
   {
       public static class IntExtensions
@@ -717,7 +745,7 @@ An extension methods is actually a special kind of static method defined in a st
           bool result = i.isGreaterThan(100);
           //result = false
       }
- 
+ ```
  
 **HTML Helpers and extension methods (.NET Core context)**
 
