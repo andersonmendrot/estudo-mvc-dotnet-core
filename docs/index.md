@@ -2,9 +2,9 @@
 
 *The classification of Models*
 
-⋅⋅* Domain Models Design
-⋅⋅* View Model Design
-⋅⋅* Data Transfer Model Design
+* Domain Models Design
+* View Model Design
+* Data Transfer Model Design
 
 1) Domain models: represent the real-world objects that participate in the business logic. For example, Student and Teacher objects in a school system, or Order (Pedido) and Product objects in a sales management system.. So, a Student could have name, classes, grades, etc. 
 
@@ -61,9 +61,9 @@ We created the model class as a partial class because we should separate the ope
 2) View models: designed for specific views. For example, if we want to show a customer (cliente/comprador) and all his/her orders on the page, we can create a class called CustomerOrdersViewModel and let this class have a Customer type property and an IList<Order> type property. So, we will have like a composition, with a relationship that One Customer has Many Orders.
 
 There are three types of View Model:
-⋅⋅* Strongly-typed model view
-⋅⋅* Loosely-typed model view that uses ListView
-⋅⋅* Loosely-typed model view that uses ListBag
+* Strongly-typed model view
+* Loosely-typed model view that uses ListView
+* Loosely-typed model view that uses ListBag
 
 
 **Strongly-typed model view**
@@ -96,8 +96,8 @@ For example, In the code below, we set a view’s view model type to be the Acto
 
 
 Let’s wrap up:
-⋅⋅* We can use the domain model class as the view model class if the view just renders a domain model object
-⋅⋅* We have to create a composite view model class for specific views if the view renders more than one object
+* We can use the domain model class as the view model class if the view just renders a domain model object
+* We have to create a composite view model class for specific views if the view renders more than one object
 
 **Loosely-typed view model**
 
@@ -112,8 +112,8 @@ public class DirectorFilmsViewModel {
 ```
 
 For that, we can use two kinds of loosely-typed view models:
-⋅⋅* ViewData**: a dictionary class that implements the IDictionary<string object> interfaces
-⋅⋅* ViewBag**:  a dynamic object
+* ViewData**: a dictionary class that implements the IDictionary<string object> interfaces
+* ViewBag**:  a dynamic object
 
  ```cs
   //Controllers/TestController.cs
@@ -241,12 +241,12 @@ Usually, the actions will launch the rendering process of the views and return t
 **TL;DR**
 A controller logically groups actions together
 i.e. the ProductController contains actions of CRUD. 
-⋅⋅*URL routing: when HTTP requests are mapped to actions 
+*URL routing: when HTTP requests are mapped to actions 
 Actions launch rendering process of views and return the rendering result
-⋅⋅*Redirection: when a action transfer the logic execution to another action
+*Redirection: when a action transfer the logic execution to another action
 
-⋅⋅*Use a singular noun for controller of .NET Core application (ProductController)
-⋅⋅*Use a plural noun for controller of .NET Core web API application (ProductsController)
+*Use a singular noun for controller of .NET Core application (ProductController)
+*Use a plural noun for controller of .NET Core web API application (ProductsController)
 
   ```cs
   using Microsoft.AspNetCore.Mvc;
@@ -310,8 +310,8 @@ return RedirectToAction(someAction);
 **URL Routing**
 
  Map an incoming request to a router handler (usually, the handler is an action)
-⋅⋅* Routes are case-insensitive
-⋅⋅* There are two types of routes supported in .NET Core:
+* Routes are case-insensitive
+* There are two types of routes supported in .NET Core:
 
  1. Conventional routing* (most used for .NET Core web applications): “{controller=Home}/{action=Index}/{id?}”
  
@@ -412,13 +412,13 @@ An example of how to get a list from database:
   
  
 
-⋅⋅* First action**: MVC web application action. It uses a view called ProductList to render a list of products and generate HTML, which is sent back to web client. 
+* First action**: MVC web application action. It uses a view called ProductList to render a list of products and generate HTML, which is sent back to web client. 
 
-⋅⋅* Views in MVC pattern**: they consist in HTML templates with view logic code, and generate a HTML content to web client
-⋅⋅* Razor**: the name of ASP.NET Core's view engine
-⋅⋅* View engine**: the component in ASP.NET Core which executes the rendering job, generates HTML and content using views and models
+* Views in MVC pattern**: they consist in HTML templates with view logic code, and generate a HTML content to web client
+* Razor**: the name of ASP.NET Core's view engine
+* View engine**: the component in ASP.NET Core which executes the rendering job, generates HTML and content using views and models
 
-⋅⋅* Next three actions**: web API actions, that return the products data directly to the web client. The data is serialized to JSON string. These actions don't follow the MVC pattern
+* Next three actions**: web API actions, that return the products data directly to the web client. The data is serialized to JSON string. These actions don't follow the MVC pattern
 
     ```cs
     public IList<Product> GetAllProducts() {
@@ -471,9 +471,9 @@ The value of the product parameter is a reference to a Product type object creat
 
 
 Principles
-⋅⋅* For HTTP GET requests, use URL of query strings to transfer data
-⋅⋅* For HTTP POST requests, use form data to transfer data
-⋅⋅* Distribute data to different parts only when necessary
+* For HTTP GET requests, use URL of query strings to transfer data
+* For HTTP POST requests, use form data to transfer data
+* Distribute data to different parts only when necessary
 
 **Custom model binder**
 
@@ -534,33 +534,33 @@ We need a custom model binder, which is a class that implements the IModelBinder
 **Views and the Razor Engine**
 
 Code in a Razor syntax isn’t HTML code, it’s a markup syntax that consists of Razon markup, C#, and HTML.
-⋅⋅* Static text: HTML elements and plain text
-⋅⋅* Executable code: the code after the @ symbol, that is C# or “C#-like”
-⋅⋅* HTML files containing Razor code have a .cshtml extension
-⋅⋅* An .NET Core view is a .cshtml file
+* Static text: HTML elements and plain text
+* Executable code: the code after the @ symbol, that is C# or “C#-like”
+* HTML files containing Razor code have a .cshtml extension
+* An .NET Core view is a .cshtml file
 
 **Razor keywords**
-⋅⋅* Pure Razor keywords: model, functions, inherits, section, helper
-⋅⋅* C# Razor keywords: using, for, foreach, if, else, while, do, switch, case, default, try, catch, finally
+* Pure Razor keywords: model, functions, inherits, section, helper
+* C# Razor keywords: using, for, foreach, if, else, while, do, switch, case, default, try, catch, finally
 Base type of view class: Microsoft.AspNetCore.Mvc.Razor.RazorPage<TModel>
 
 Two common mistakes:
-⋅⋅* Adding a semicolon (;) after Razon expressions
-⋅⋅* Using a Razor code block @{...} where there should be @(...)
+* Adding a semicolon (;) after Razon expressions
+* Using a Razor code block @{...} where there should be @(...)
 
 **View discovery**
 
-⋅⋅* First action: Razor engine will 
+* First action: Razor engine will 
 1. try to find project-root level folder called Views
 2. try to find subfolder that has the same name as the controller (Views/Home)
 3. try to find .cshtml file which has the same name as the action (Views/Home/Index.cstml)
 
-⋅⋅* Second action:
+* Second action:
 1. try to find folder Views
 2. try to find the subfolder Home
 3. try to find Index.cshtml
 
-⋅⋅* Third action: 
+* Third action: 
 1. try to find the relative path
 
 For the first and second View methods, if the folder or view file does not exists, the Razor engine try to find for the Index.cshtml file in Views/Shared folder
@@ -586,13 +586,13 @@ For the first and second View methods, if the folder or view file does not exist
 
 **Difference of ILIST and List**
 
-⋅⋅*List<T> is a class that implements IList<T>. It’s more specific, and should be used when we want to use fields, that is, instantiate a list like this:
+*List<T> is a class that implements IList<T>. It’s more specific, and should be used when we want to use fields, that is, instantiate a list like this:
 
 ```cs
 List <int> myList = new List<int>();
 ```
 
-⋅⋅* IList<T> is an interface implemented by List<T>. It should be used as arguments or properties because it’s more general. It cannot be instantiated
+* IList<T> is an interface implemented by List<T>. It should be used as arguments or properties because it’s more general. It cannot be instantiated
 
 Wrong: 
 
