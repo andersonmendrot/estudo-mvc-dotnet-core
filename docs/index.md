@@ -8,13 +8,14 @@
 
 1) Domain models: represent the real-world objects that participate in the business logic. For example, Student and Teacher objects in a school system, or Order (Pedido) and Product objects in a sales management system.. So, a Student could have name, classes, grades, etc. 
 
- 
+```cs
 public partial class Actor {
     public int Actor_ID {get; set;}
     public string First_Name {get; set;}
     public string Last_Name {get; set;}
     public DateTime Last_Update {get; set;}
 }
+```
 
 The two modification below are more suitable for ORM. 
 
