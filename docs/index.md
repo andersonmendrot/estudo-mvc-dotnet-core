@@ -749,14 +749,6 @@ An extension methods is actually a special kind of static method defined in a st
  
 **HTML Helpers and extension methods (.NET Core context)**
 
-HTML helpers are used to inject HTML code using a Razor expression. For example, @HTML.MyHelper = “<h1>Hello World!</h1>”..
+HTML helpers are used to inject HTML code using a Razor expression. For example 
 
-
-
-
-
-
-
-
-
-
+@HTML.MyHelper = “<h1>Hello World!</h1>
