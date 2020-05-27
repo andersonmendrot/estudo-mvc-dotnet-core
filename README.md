@@ -12,10 +12,10 @@ Repositório para armazenar anotações e exercícios sendo realizados no curso 
 
 ```csharp
 public partial class Actor {
-	public int Actor_ID {get; set;}
-	public string First_Name {get; set;}
-	public string Last_Name {get; set;}
-	public DateTime Last_Update {get; set;}
+    public int Actor_ID {get; set;}
+    public string First_Name {get; set;}
+    public string Last_Name {get; set;}
+    public DateTime Last_Update {get; set;}
 }
 ```
 
@@ -23,11 +23,11 @@ The two modification below are more suitable for ORM.
 
 ```csharp
 public partial class Actor {
-	[Key]
-	public int Actor_ID {get; set;}
-	public string First_Name {get; set;}
-	public string Last_Name {get; set;}
-	public DateTime Last_Update {get; set;}
+    [Key]
+    public int Actor_ID {get; set;}
+    public string First_Name {get; set;}
+    public string Last_Name {get; set;}
+    public DateTime Last_Update {get; set;}
 }
 
  
@@ -77,9 +77,9 @@ For example, In the code below, we set a view’s view model type to be the Acto
 
 @model HelloMVC.Models.Actor <!--A view model type strongly-typed for Actor-->
 <html>
-      <head>
-        <title> Actor Detail </title>
-      </head>
+	<head>
+	<title> Actor Detail </title>
+	</head>
  
 <body>
     	<h2>Actor Detail</h2>
@@ -123,17 +123,17 @@ For that, we can use two kinds of loosely-typed view models:
 public class TestController : Controller {
 
 public IActionResult Foo(){
-          //First: Using ViewData
-          ViewData["Title"] = "Foo";
-          ViewData["Header"] = "Header Foo";
-          ViewData["Items"] = "AAA BBB CCC".Split(' ');
+    //First: Using ViewData
+    ViewData["Title"] = "Foo";
+    ViewData["Header"] = "Header Foo";
+    ViewData["Items"] = "AAA BBB CCC".Split(' ');
 
-          //Second: Using ViewBag
-          ViewBag.Title = "Bar";
-          ViewBag.Header = "Header Bar";
-          ViewBag.Items = "DDD EEE FFF".Split(' ');
-          return View();
-      }
+    //Second: Using ViewBag
+    ViewBag.Title = "Bar";
+    ViewBag.Header = "Header Bar";
+    ViewBag.Items = "DDD EEE FFF".Split(' ');
+    return View();
+   }
  }
  ```
 
@@ -225,11 +225,11 @@ public class Film {
 
 ```csharp
 public class CreateOrUpdateDTO {
-	  public int ID { get; set; }
-	  public string Name { get; set; }
-	  public int Year { get; set; }
-	  public ICollection<Genre> Genres { get; set; }
-	  public bool IsInStore { get; set; }
+    public int ID { get; set; }
+    public string Name { get; set; }
+    public int Year { get; set; }
+    public ICollection<Genre> Genres { get; set; }
+    public bool IsInStore { get; set; }
 }
 ```
 
@@ -423,8 +423,8 @@ The action above will render:...
 
 ```csharp
 public IList<Product> GetAllProducts() {
-      IList<Product> products = dbContext.GetAllProducts();
-      return products;
+    IList<Product> products = dbContext.GetAllProducts();
+    return products;
 }
 
 public IActionResult GetAllProducts() {
@@ -433,8 +433,8 @@ public IActionResult GetAllProducts() {
 }
 
 public IActionResult GetAllProducts() {
-      IList<Product> products = dbContext.GetAllProducts();
-      return new Json(products);
+    IList<Product> products = dbContext.GetAllProducts();
+    return new Json(products);
 }
 
 //Each action above will return a JSON object:
