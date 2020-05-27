@@ -80,19 +80,19 @@ For example, In the code below, we set a view’s view model type to be the Acto
     <title> Actor Detail </title>
     </head>
  
-<body>
-    <h2>Actor Detail</h2>
-        <table border=1>
-	<tr>
-	    <td>ID</td>
-	    <td>@Model.ActorID</td>
-	</tr>
-	<tr>
-	    <td>Name</td>
-	    <td>@($"{Model.FirstName} {Model.LastName}")</td>
-	</tr>
-	</table>
-</body>
+    <body>
+        <h2>Actor Detail</h2>
+            <table border=1>
+	        <tr>
+	            <td>ID</td>
+	            <td>@Model.ActorID</td>
+	        </tr>
+	        <tr>
+	            <td>Name</td>
+	            <td>@($"{Model.FirstName} {Model.LastName}")</td>
+	        </tr>
+	    </table>
+    </body>
 </html>
 ```
 
