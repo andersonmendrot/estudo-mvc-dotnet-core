@@ -29,7 +29,6 @@ public partial class Actor {
     public string Last_Name {get; set;}
     public DateTime Last_Update {get; set;}
 }
-
  
 [Table(“actor”)]
 public partial class Actor {
@@ -74,28 +73,28 @@ If not explicitly stated, when mentioning view model, the view model is strongly
 
 For example, In the code below, we set a view’s view model type to be the Actor class we created in the last lesson, and we also render the view model in an HTML table.
 
-
+```no-highlight
 @model HelloMVC.Models.Actor <!--A view model type strongly-typed for Actor-->
 <html>
-	<head>
-	<title> Actor Detail </title>
-	</head>
+    <head>
+    <title> Actor Detail </title>
+    </head>
  
 <body>
-    	<h2>Actor Detail</h2>
-    	<table border=1>
-        <tr>
-            <td>ID</td>
-            <td>@Model.ActorID</td>
-        </tr>
-        <tr>
-            <td>Name</td>
-            <td>@($"{Model.FirstName} {Model.LastName}")</td>
-        </tr>
-    	</table>
+    <h2>Actor Detail</h2>
+        <table border=1>
+	<tr>
+	    <td>ID</td>
+	    <td>@Model.ActorID</td>
+	</tr>
+	<tr>
+	    <td>Name</td>
+	    <td>@($"{Model.FirstName} {Model.LastName}")</td>
+	</tr>
+	</table>
 </body>
 </html>
-
+```
 
 Let’s wrap up:
 * We can use the domain model class as the view model class if the view just renders a domain model object
@@ -136,9 +135,9 @@ public IActionResult Foo(){
    }
  }
  ```
-
- <!--Views/Test/Foo.cshtml-->
-
+ 
+```no-highlight
+<!--Views/Test/Foo.cshtml-->
 <html>
   <head>
       <title>@ViewData["Title"]</title> <!--or @ViewBag.Title-->
@@ -146,19 +145,20 @@ public IActionResult Foo(){
   <body>
       <h1>@ViewData["Header"]</h1> <!--or @ViewBag.Header-->
       <ul>
-          @foreach (var item in (string[])ViewData["items"]) 
-                   <!--or (string[])ViewBag.Items)-->
-          {
-              <li>@item</li>
-          }
+	  @foreach (var item in (string[])ViewData["items"]) 
+		   <!--or (string[])ViewBag.Items)-->
+	  {
+	      <li>@item</li>
+	  }
       </ul>
   </body>
 </html>
-
+```
 3) Data transfer model: usually, we can them Data Transfer Objects (DTO). Sometimes we have to transfer some temporary combination of data fields from views to controllers, especially when submitting a form or invoking an AJAX call. 
 
 *Domain Model as DTO*
 
+```no-highlight
   <!--Views/Film/Create.cshtml-->
 
  <form action="film/create" method="POST">
@@ -190,6 +190,7 @@ public IActionResult Foo(){
     <!--other elements-->
     <input type="submit" value="Update" />
 </form>
+```
 
 *The DTO class is the same as the Film domain model class:*
 
@@ -283,7 +284,7 @@ The feature of converting return values to JSON objects means that ASP.NET Core 
 
 Usually, the returns of actions are:
 
-```cs
+```csharp
 return View(something);
 return RedirectToAction(someAction);
 ```
@@ -674,42 +675,43 @@ In the first two lines we say that we wanna to use ProductListVM. After that, we
 	
 So we create the HTML structure to show the @off and inside that we create a table to show the list of Products that we passed as a parameter in the View(...) command.
     
-     
-    @using MyWebApp.Models
-    @model ProductListVM //it has the value vm, setted in View(...) in ProductController
- 
-    @{
-        var start = this.Model.Discount.Start.ToString("d");
-        var end = this.Model.Discount.End.ToString("d");
-        var rate = this.Model.Discount.Rate;
-        var off = (1-rate)*100;
-    }
- 
-    <html>
-        <body>
-            <h1>Product List</h1>
-            <h4 style="color:blue">
-                The @off% of discount will be valid from @start to @end!
-            </h4>
- 
-            <table border="1">
-                <tr>
-                    <th>ID</th>
-                    <th>Name</th>
-                    <th>Price</th>
-                    <th>Discount Price</th>
-                </tr>
-                @foreach(var p in this.Model.Products){
-                    <tr>
-                        <td>@p.ID</td>
-                        <td>@p.Name</td>
-                        <td>@p.Price</td>
-                        <td>@(p.Price*rate)</td>
-                    </tr>
-                }
-            </table>
-        </body>
-    </html>
+ ```no-highlight
+@using MyWebApp.Models
+@model ProductListVM //it has the value vm, setted in View(...) in ProductController
+
+@{
+var start = this.Model.Discount.Start.ToString("d");
+var end = this.Model.Discount.End.ToString("d");
+var rate = this.Model.Discount.Rate;
+var off = (1-rate)*100;
+}
+
+<html>
+<body>
+    <h1>Product List</h1>
+    <h4 style="color:blue">
+	The @off% of discount will be valid from @start to @end!
+    </h4>
+
+    <table border="1">
+	<tr>
+	    <th>ID</th>
+	    <th>Name</th>
+	    <th>Price</th>
+	    <th>Discount Price</th>
+	</tr>
+	@foreach(var p in this.Model.Products){
+	    <tr>
+		<td>@p.ID</td>
+		<td>@p.Name</td>
+		<td>@p.Price</td>
+		<td>@(p.Price*rate)</td>
+	    </tr>
+	}
+    </table>
+</body>
+</html>
+```
 
 **Difference between @model and @Model**
 
